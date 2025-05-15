@@ -88,16 +88,160 @@
               "size": { "width": 5, "depth": 10 }
             },
             {
-              "id": "r13",
+              "id": "r111",
               "number": "140",
               "coordinates": { "x": 67.5, "y": -15 },
               "size": { "width": 10, "depth": 10 }
             },
             {
-              "id": "r13",
+              "id": "r131",
               "number": "138",
               "coordinates": { "x": 67.5, "y": -27.5 },
               "size": { "width": 10, "depth": 15 }
+            },
+            {
+              "id": "r14",
+              "number": "",
+              "coordinates": { "x": 67.5, "y": -42.5 },
+              "size": { "width": 10, "depth": 15 }
+            },
+            {
+              "id": "r15",
+              "number": "",
+              "coordinates": { "x": 67.5, "y": -55 },
+              "size": { "width": 10, "depth": 10 }
+            },
+            {
+              "id": "r16",
+              "number": "1-133a",
+              "coordinates": { "x": 75, "y": -55 },
+              "size": { "width": 5, "depth": 10 }
+            },
+            {
+              "id": "r17",
+              "number": "",
+              "coordinates": { "x": 82.5, "y": -55 },
+              "size": { "width": 10, "depth": 10 }
+            },
+            {
+              "id": "r18",
+              "number": "1-133б",
+              "coordinates": { "x": 92.5, "y": -55 },
+              "size": { "width": 10, "depth": 10 }
+            },
+            {
+              "id": "r19",
+              "number": "СУ",
+              "coordinates": { "x": 92.5, "y": -40 },
+              "size": { "width": 10, "depth": 10 }
+            },
+            {
+              "id": "r20",
+              "number": "1-132",
+              "coordinates": { "x": 82.5, "y": -40 },
+              "size": { "width": 10, "depth": 10 }
+            },
+            {
+              "id": "r21",
+              "number": "1-130",
+              "coordinates": { "x": 82.5, "y": -27.5 },
+              "size": { "width": 10, "depth": 15 }
+            },
+            {
+              "id": "r212",
+              "number": "1-130а",
+              "coordinates": { "x": 82.5, "y": -17.5 },
+              "size": { "width": 10, "depth": 5 }
+            },
+            {
+              "id": "r22",
+              "number": "1-129",
+              "coordinates": { "x": 82.5, "y": -12.5 },
+              "size": { "width": 10, "depth": 5 }
+            },
+            {
+              "id": "r23",
+              "number": "1-128",
+              "coordinates": { "x": 82.5, "y": -7.5 },
+              "size": { "width": 10, "depth": 5 }
+            },
+            {
+              "id": "r24",
+              "number": "1-127",
+              "coordinates": { "x": 82.5, "y": -2.5 },
+              "size": { "width": 10, "depth": 5 }
+            },
+            {
+              "id": "r25",
+              "number": "1-126",
+              "coordinates": { "x": 82.5, "y": 2.5 },
+              "size": { "width": 10, "depth": 5 }
+            },
+            {
+              "id": "r26",
+              "number": "1-126",
+              "coordinates": { "x": 82.5, "y": 7.5 },
+              "size": { "width": 10, "depth": 5 }
+            },
+            {
+              "id": "r27",
+              "number": "1-126a",
+              "coordinates": { "x": 82.5, "y": 12.5 },
+              "size": { "width": 10, "depth": 5 }
+            },
+            {
+              "id": "r28",
+              "number": "1-125",
+              "coordinates": { "x": 82.5, "y": 17.5 },
+              "size": { "width": 10, "depth": 5 }
+            },
+            {
+              "id": "r29",
+              "number": "1-124",
+              "coordinates": { "x": 82.5, "y": 22.5 },
+              "size": { "width": 10, "depth": 5 }
+            },
+            {
+              "id": "r30",
+              "number": "1-123",
+              "coordinates": { "x": 82.5, "y": 32.5 },
+              "size": { "width": 10, "depth": 15 }
+            },
+            {
+              "id": "r31",
+              "number": "1-121",
+              "coordinates": { "x": 82.5, "y": 45 },
+              "size": { "width": 10, "depth": 10 }
+            },
+            {
+              "id": "r32",
+              "number": "1-122",
+              "coordinates": { "x": 97.5, "y": 45 },
+              "size": { "width": 20, "depth": 10 }
+            },
+            {
+              "id": "r33",
+              "number": "1-120",
+              "coordinates": { "x": 102.5, "y": 52.5 },
+              "size": { "width": 10, "depth": 5 }
+            },
+            {
+              "id": "r34",
+              "number": "",
+              "coordinates": { "x": 102.5, "y": 60 },
+              "size": { "width": 10, "depth": 10 }
+            },
+            {
+              "id": "r35",
+              "number": "",
+              "coordinates": { "x": 92.5, "y": 60 },
+              "size": { "width": 10, "depth": 10 }
+            },
+            {
+              "id": "r36",
+              "number": "1-116",
+              "coordinates": { "x": 85, "y": 60 },
+              "size": { "width": 5, "depth": 10 }
             }
           ],
           "corridors": [
@@ -118,7 +262,7 @@
             {
               "id": "c3",
               "name": "Corridor 3",
-              "start": { "x": 72.5, "y": 0, "z": -55 },
+              "start": { "x": 72.5, "y": 0, "z": -50 },
               "width": 25,
               "depth": 5
             },

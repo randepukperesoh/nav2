@@ -1,6 +1,7 @@
 import "./App.css";
 import { Canvas, useThree } from "@react-three/fiber";
 import {
+  CameraControls,
   Edges,
   OrbitControls,
   Plane,
@@ -35,7 +36,7 @@ const Room = ({ room }: { room: IRoom }) => {
       <Text
         position={[0, 1, 0]}
         anchorX="center"
-        anchorY="top"
+        anchorY="middle"
         color="black"
         fontSize={3.5}
         rotation={textRotation}
@@ -89,6 +90,9 @@ const Room = ({ room }: { room: IRoom }) => {
 // };
 
 import * as THREE from "three";
+import { useEffect } from "react";
+import { buildRoute } from "./i";
+import { useCreateRoute } from "./useCreateRoute";
 
 const Corridor = ({ corridor }: { corridor: ICoridors }) => {
   const { x, y, z } = corridor.start;
@@ -157,11 +161,26 @@ const TopViewCameraControls = () => {
   camera.lookAt(0, 0, 0); // Камера смотрит в центр сцены
 
   return (
-    <TrackballControls
-      noRotate={true} // Отключаем вращение
-      // noPan={false} // Разрешаем перемещение
-      dynamicDampingFactor={0.25}
-    />
+    <CameraControls />
+    // <TrackballControls
+    //   noRotate={true} // Отключаем вращение
+    //   // noPan={false} // Разрешаем перемещение
+    //   dynamicDampingFactor={0.25}
+    // />
+  );
+};
+
+import { Line } from "@react-three/drei";
+
+const RouteVisualization = () => {
+  const { points } = useCreateRoute();
+
+  if (points.length < 2) return null;
+
+  return (
+    <>
+      <Line points={points} color="hotpink" lineWidth={1} worldUnits={true} />
+    </>
   );
 };
 
@@ -172,8 +191,9 @@ const FloorMap = () => {
     <Canvas camera={{ position: [50, 10, 50], fov: 90 }}>
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} />
-      <OrbitControls />
-      {/* <TopViewCameraControls /> */}
+      {/* <OrbitControls /> */}
+      <RouteVisualization />
+      <TopViewCameraControls />
       {floor.rooms.map((room) => (
         <Room key={room.id} room={room} />
       ))}
