@@ -1,7 +1,6 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
@@ -39,4 +38,23 @@
 
 .read-the-docs {
   color: #888;
+}
+.floorManipulator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 1000;
+}
+
+.floorItem {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #13c131;
+  cursor: pointer;
 }
