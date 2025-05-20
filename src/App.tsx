@@ -3,6 +3,7 @@ import { Canvas, useThree } from "@react-three/fiber";
 import {
   Line,
   OrbitControls,
+  Plane,
   Sphere,
   Text,
   TrackballControls,
@@ -11,6 +12,7 @@ import { useFloorLoader } from "./hooks/useFloorLoader.ts";
 // import campusData from "./assets/campusData.json";
 import dots from "./assets/names.json";
 import routes from "./assets/routes.json";
+import { Modal } from "./components/Modal/Modal.tsx";
 
 export const TopViewCameraControls = () => {
   const { camera } = useThree();
@@ -88,7 +90,14 @@ const FloorMap = () => {
             key={el.name}
             position={el.position as [number, number, number]}
           >
-            <Sphere scale={0.1} />
+            <Modal renderProp={() => <div>сашка какашка</div>}>
+              <Plane
+                rotation={[-Math.PI / 2, 0, 0]}
+                args={[2.5, 3.5]}
+                onClick={() => console.log(el.name)}
+                scale={2}
+              />
+            </Modal>
             <Text color={"black"}>{el.name}</Text>
           </mesh>
         ))}
