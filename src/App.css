@@ -1,6 +1,4 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
   text-align: center;
 }
 
@@ -61,17 +59,60 @@
 
 .modal {
   position: fixed;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  z-index: 100;
-  flex-direction: column;
-  justify-content: end;
-  align-items: center;
-}
-
-.modal_content {
   width: 40%;
   height: 40%;
+  display: flex;
+  z-index: 100;
   background-color: red;
+  flex-direction: column;
+  align-items: center;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 0.5rem;
+}
+
+.modalRoute {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+  gap: 0.5rem;
+}
+
+.modalRoute_route {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalRoute_input {
+  width: 80%;
+  height: 40px;
+  border-radius: 0.5rem;
+  outline: none;
+  border: none;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  font-size: 1.3rem;
+}
+
+.modalRoute_cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  height: 225px;
+  overflow-x: hidden;
+}
+
+.modalRoute_cards_room {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #13c131;
+  cursor: pointer;
+  height: max-content;
 }

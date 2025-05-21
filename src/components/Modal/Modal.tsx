@@ -16,14 +16,14 @@ export const Modal: FC<IModal> = ({ renderProp, children }) => {
       {open && (
         <Html>
           {createPortal(
-            <div className="modal" onClick={() => setIsOpen(false)}>
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className="modal_content"
-              >
-                {renderProp(setIsOpen)}
-              </div>
+            // <div className="modal" onClick={() => setIsOpen(false)}>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="modal modal_content"
+            >
+              {renderProp(setIsOpen)}
             </div>,
+            // </div>
             document.body
           )}
         </Html>

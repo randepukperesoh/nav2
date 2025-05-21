@@ -38,9 +38,9 @@ export class Graph {
             smallest = nodes.dequeue()?.val;
             if (smallest === finish) {
                 // Построение пути
-                while (previous[smallest]) {
-                    path.push(smallest);
-                    smallest = previous[smallest];
+                while (previous[smallest!]) {
+                    path.push(smallest!);
+                    smallest = previous[smallest!]!;
                 }
                 break;
             }
