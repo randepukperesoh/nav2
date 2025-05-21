@@ -2,34 +2,6 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
 .card {
   padding: 2em;
 }
@@ -42,34 +14,50 @@
   top: 50%;
   transform: translateY(-50%);
   left: 1rem;
-  padding: 1rem;
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
   z-index: 1000;
+  background-color: #4d536a;
+}
+
+.floorHead {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
 }
 
 .floorItem {
-  padding: 0.5rem;
+  padding: 0.5rem 0;
   border-radius: 0.5rem;
-  background-color: #13c131;
   cursor: pointer;
+}
+.floorItem_selected {
+  background-color: #3b4353;
+}
+.floorItem:hover {
+  background-color: #3b4353;
+}
+
+.modalRoute_flex {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .modal {
   position: fixed;
-  width: 40%;
-  height: 40%;
+  width: 20%;
+  height: 20%;
   display: flex;
-  z-index: 100;
-  background-color: red;
+  background-color: #878da5;
   flex-direction: column;
   align-items: center;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   border-radius: 0.5rem;
+  z-index: 1001;
+  padding: 1rem;
 }
 
 .modalRoute {
@@ -90,7 +78,7 @@
 }
 
 .modalRoute_input {
-  width: 80%;
+  width: 100%;
   height: 40px;
   border-radius: 0.5rem;
   outline: none;
@@ -100,19 +88,63 @@
   font-size: 1.3rem;
 }
 
+.qrCodeWrapper {
+  width: 128px;
+  height: 128px;
+}
+
 .modalRoute_cards {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   padding: 0.5rem;
-  height: 225px;
+  height: 180px;
   overflow-x: hidden;
 }
 
 .modalRoute_cards_room {
   padding: 0.5rem;
   border-radius: 0.5rem;
-  background-color: #13c131;
+  background-color: #3b4353;
   cursor: pointer;
   height: max-content;
+}
+
+.modalRoute_cards_room:hover {
+  background-color: #55627a;
+}
+
+.modal_room {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal_room_btns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.route-modal {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  width: 50%;
+  height: 50px; /* Высота закрытого модального окна */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: height 0.3s ease-in-out; /* Анимация изменения высоты */
+  overflow: hidden;
+  transform: translateX(-50%);
+  border-radius: 0.5rem 0.5rem 0 0;
+  z-index: 1001;
+  background-color: #4d536a;
+}
+
+.route-modal.open {
+  height: 350px; /* Высота открытого модального окна */
+  border-radius: 0.5rem;
 }

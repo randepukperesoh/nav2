@@ -4,16 +4,11 @@ import { FloorManipulator } from "../FloorManipulator/FloorManipulator";
 import { Room, type IDot } from "../Room/Room";
 import { OrbitControls } from "@react-three/drei";
 import dots from "../../assets/names.json";
-
-// export const TopViewCameraControls = () => {
-//   const { camera } = useThree();
-
-//   camera.position.set(0, 80, 0);
-//   camera.up.set(0, 1, 0);
-//   camera.lookAt(0, 0, 0);
-
-//   return <TrackballControls dynamicDampingFactor={0.25} />;
-// };
+import { useShortestPath } from "../../hooks/usePath";
+import { useRouteStore } from "../store/store";
+import { AnimatedLine } from "../AnimtedLine/AnimatedLine";
+import { RouteModal } from "../RouteModal/RouteModal";
+import { useGetPathFromParam } from "../../hooks/useGetPathFromParam";
 
 export const FloorMap = () => {
   const {
@@ -24,12 +19,20 @@ export const FloorMap = () => {
     selectedFloor,
   } = useFloorLoader();
 
+  const { startId, endId } = useRouteStore();
+
+  const { shortestPath: routes } = useShortestPath(startId, endId);
+
+  useGetPathFromParam();
+
   return (
     <>
       <FloorManipulator
+        selectedFloor={floorNumber}
         handleChangeFloor={handleChangeFloor}
         arrFloors={arrFloors}
       />
+      <RouteModal />
       <Canvas camera={{ position: [50, 10, 50], fov: 90 }}>
         <primitive
           object={selectedFloor.scene}
@@ -39,18 +42,10 @@ export const FloorMap = () => {
           <Room key={el.name + "_" + i} room={el as IDot} />
         ))}
 
-        {/* {routes.map((el) => (
-          <Line
-            key={"i_" + el.id}
-            points={[el.end as Position, el.start as Position]}
-            color={"pink"}
-          />
-        ))} */}
+        {routes.length > 0 && <AnimatedLine points={routes} />}
 
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
-        {/* <RouteVisualization /> */}
-        {/* <TopViewCameraControls /> */}
         <OrbitControls />
       </Canvas>
     </>

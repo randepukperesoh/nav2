@@ -1,7 +1,7 @@
 import { useGLTF } from "@react-three/drei";
 import { useState } from "react";
 
-const MOCK_PATHS = ["/dstu_0.glb", "/dstu.glb",];
+const MOCK_PATHS = ["/dstu_0.glb", "/dstu.glb", "/dstu_2.glb", "/dstu-3.glb", "/dstu-4.glb", "/dstu-5.glb", "/dstu-6.glb", "/dstu-7.glb", "/dstu-8.glb"];
 
 export const useFloorLoader = () => {
   const [floorNumber, setFloorNumber] = useState(1);

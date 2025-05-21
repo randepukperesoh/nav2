@@ -1,3 +1,4 @@
+import { Html } from "@react-three/drei";
 import { useState, type FC, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 
@@ -10,18 +11,21 @@ export const Modal: FC<IModal> = ({ renderProp, children }) => {
   const [open, setIsOpen] = useState(false);
 
   return (
-    <>
-      <div onClick={() => setIsOpen(true)}>{children}</div>
+    <mesh>
+      <mesh onClick={() => setIsOpen(true)}>{children}</mesh>
       {open && (
-        <>
+        <Html>
           {createPortal(
-            <div onClick={(e) => e.stopPropagation()} className="modal ">
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="modal modal_content"
+            >
               {renderProp(setIsOpen)}
             </div>,
             document.body
           )}
-        </>
+        </Html>
       )}
-    </>
+    </mesh>
   );
 };
