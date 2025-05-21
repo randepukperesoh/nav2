@@ -90,10 +90,10 @@ const FloorMap = () => {
             key={el.name}
             position={el.position as [number, number, number]}
           >
-            <Modal renderProp={() => <div>сашка какашка</div>}>
+            <Modal renderProp={() => <div>{el.name}</div>}>
               <Plane
                 rotation={[-Math.PI / 2, 0, 0]}
-                args={[2.5, 3.5]}
+                args={el.args as [number, number]}
                 onClick={() => console.log(el.name)}
                 scale={2}
               />
@@ -103,7 +103,7 @@ const FloorMap = () => {
         ))}
 
         {routes.map((el) => (
-          <Line key={"i_" + el.id} points={[el.end, el.start]} color={"pink"} />
+          <Line key={"i_" + el.id} lineWidth={2} points={[el.end, el.start]} color={"green"} />
         ))}
 
         <ambientLight intensity={0.5} />
