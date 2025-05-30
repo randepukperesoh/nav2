@@ -12,7 +12,8 @@ import { Camera } from "../Icons/Camera";
 import { Plane } from "@react-three/drei";
 import { MeshBasicMaterial } from "three";
 import { useMicroRoute } from "../../hooks/useMicroRoute";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { Position } from "../../types";
 
 const FloorMap = () => {
   const { arrFloors, floorNumber, handleChangeFloor, selectedFloor } =
@@ -23,6 +24,9 @@ const FloorMap = () => {
   const [openModalName, setOpenModalName] = useState<string | null>(null);
 
   const { shortestPath: routes } = useShortestPath(startId, endId);
+
+  const [cameraPosition, setCameraPosition] = useState<Position>([0, 100, 0]);
+  const [cameraTarget, setCameraTarget] = useState<Position>([0, 0, 0]);
 
   useGetPathFromParam();
 
@@ -38,6 +42,25 @@ const FloorMap = () => {
   });
 
   // console.log({ microRoute });
+
+  useEffect(() => {
+    if (microRoute && microRoute.length > 0) {
+      const newPosition = [
+        microRoute[step].coordinates[0],
+        200, // Фиксированная высота камеры
+        microRoute[step].coordinates[2],
+      ] as Position;
+
+      const newTarget = [
+        microRoute[step].coordinates[0],
+        0, // Фиксированная высота цели (уровень пола)
+        microRoute[step].coordinates[2],
+      ] as Position;
+
+      setCameraPosition(newPosition);
+      setCameraTarget(newTarget);
+    }
+  }, [step]);
 
   return (
     <>
@@ -69,27 +92,12 @@ const FloorMap = () => {
           );
         })}
 
-        {routes.length > 0 && <AnimatedLine floorNumber={floorNumber} points={routes} />}
+        {routes.length > 0 && (
+          <AnimatedLine floorNumber={floorNumber} points={routes} />
+        )}
         <Camera
-          position={
-            microRoute && microRoute.length > 0
-              ? [
-                  microRoute[step].coordinates[0],
-                  100,
-                  microRoute[step].coordinates[2],
-                ]
-              : [0, 100, 0]
-          }
-          target={
-            // microRoute
-            //   ? [
-            //       microRoute[step].coordinates[0],
-            //       0,
-            //       microRoute[step].coordinates[2],
-            //     ]
-            //   :
-            [0, 0, 0]
-          }
+          position={cameraPosition}
+          target={cameraTarget}
         />
         <Plane
           position={[0, -10, -10]}

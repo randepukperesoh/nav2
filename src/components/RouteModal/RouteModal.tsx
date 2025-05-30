@@ -92,11 +92,11 @@ export const RouteModal: FC<IRouteModal> = ({
         <div className="modal-content">
           <div className="modalRoute">
             <div className="modalRoute_route">
-              <div onClick={() => setStartId(null)} className="roomTag">
+              <div onClick={() => {setStartId(null)}} className="roomTag">
                 {startId}
               </div>
               <RouteIcon />
-              <div onClick={() => setEndId(null)} className="roomTag">
+              <div onClick={() => {setEndId(null)}} className="roomTag">
                 {endId}
               </div>
 
