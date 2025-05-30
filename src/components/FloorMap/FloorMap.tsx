@@ -69,10 +69,10 @@ const FloorMap = () => {
           );
         })}
 
-        {routes.length > 0 && <AnimatedLine points={routes} />}
+        {routes.length > 0 && <AnimatedLine floorNumber={floorNumber} points={routes} />}
         <Camera
           position={
-            microRoute
+            microRoute && microRoute.length > 0
               ? [
                   microRoute[step].coordinates[0],
                   100,

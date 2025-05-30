@@ -10,6 +10,9 @@ interface IRouteStore {
 
   route: Position[];
   setRoute: (route: Position[]) => void;
+
+  currentFloor: number;
+  setCurrentFloor: (i: number) => void;
 }
 
 export const useRouteStore = create<IRouteStore>((set) => ({
@@ -21,4 +24,7 @@ export const useRouteStore = create<IRouteStore>((set) => ({
 
   route: [],
   setRoute: (route: Position[]) => set({ route }),
+
+  currentFloor: 1,
+  setCurrentFloor: (i) => set({currentFloor: i})
 }));

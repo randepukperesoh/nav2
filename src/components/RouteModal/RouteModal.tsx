@@ -10,21 +10,14 @@ import { LeftIcon } from "../Icons/LeftIcon";
 import { RightIcon } from "../Icons/RightIcon";
 import { UpIcon } from "../Icons/UpIcon";
 import { PointIcon } from "../Icons/Point";
+import type { DirectionStep } from "../../hooks/useMicroRoute";
+import { Stairs } from "../Icons/Stairs";
 
 interface IRouteModal {
   step: number;
   handleNextStep: () => void;
   handlePrevStep: () => void;
-  microRoute: (
-    | {
-        direction: string;
-        distance: string;
-      }
-    | {
-        direction: string;
-        distance: number;
-      }
-  )[];
+  microRoute: DirectionStep[]
 }
 
 const MockDirection: Record<string, ReactNode> = {
@@ -33,6 +26,7 @@ const MockDirection: Record<string, ReactNode> = {
   прямо: <UpIcon />,
   "начало маршрута": <PointIcon />,
   "конец маршрута": <PointIcon />,
+  "лестница": <Stairs/>
 };
 
 export const RouteModal: FC<IRouteModal> = ({

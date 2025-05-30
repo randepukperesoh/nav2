@@ -13,7 +13,7 @@ export const Camera = ({
   const { camera } = useThree();
 
   useEffect(() => {
-    camera.position.set(...position);
+    // camera.position.set(...position);
     // camera.lookAt(...target);
   }, [position, target, camera]);
 
@@ -33,9 +33,9 @@ export const Camera = ({
         minDistance={30}
         maxDistance={300}
         minPolarAngle={0}
-        maxPolarAngle={Math.PI / 2}
-        minAzimuthAngle={-Infinity}
-        maxAzimuthAngle={Infinity}
+        maxPolarAngle={0}
+        minAzimuthAngle={0}
+        maxAzimuthAngle={0}
         enableDamping={true}
         dampingFactor={0.25}
         enableZoom={true}
