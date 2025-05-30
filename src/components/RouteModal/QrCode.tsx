@@ -9,6 +9,8 @@ export const QrCodeIcon = () => {
       viewBox="0 0 401.994 401.994"
       width={32}
       height={32}
+      fill="#1370b9"
+      cursor={"pointer"}
     >
       <g>
         <g>

@@ -1,9 +1,11 @@
 import "./App.css";
-import { FloorMap } from "./components/FloorMap/FloorMap.tsx";
+import FloorMap from "./components/FloorMap/FloorMap";
+
+// const LoadingSpinner = () => <span className="loader"></span>;
 
 const App = () => {
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <div className="main">
       <FloorMap />
     </div>
   );

@@ -2,13 +2,14 @@
   text-align: center;
 }
 
-.card {
-  padding: 2em;
+.main {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.read-the-docs {
-  color: #888;
-}
 .floorManipulator {
   position: absolute;
   top: 50%;
@@ -18,7 +19,9 @@
   display: flex;
   flex-direction: column;
   z-index: 1000;
-  background-color: #4d536a;
+  background-color: #fff;
+  color: #80889d;
+  box-shadow: 0 0 7px 2px#1370b9;
 }
 
 .floorHead {
@@ -30,12 +33,14 @@
   padding: 0.5rem 0;
   border-radius: 0.5rem;
   cursor: pointer;
+  color: #80889d;
+  transition: all 0.2s ease;
 }
 .floorItem_selected {
-  background-color: #3b4353;
+  background-color: #c7c9cf;
 }
 .floorItem:hover {
-  background-color: #3b4353;
+  background-color: #c7c9cf;
 }
 
 .modalRoute_flex {
@@ -46,10 +51,33 @@
 
 .modal {
   position: fixed;
-  width: 20%;
-  height: 20%;
+  width: 30%;
+  height: 30%;
   display: flex;
-  background-color: #878da5;
+  background-color: #fff;
+  flex-direction: column;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 0.5rem;
+  z-index: 1001;
+  padding: 1rem;
+  box-shadow: 0 0 1000px 1000px rgb(56, 66, 79, 0.7);
+}
+
+@media screen and (max-width: 768px) {
+  .modal {
+    width: 60%;
+  }
+}
+
+.modalBotom {
+  position: fixed;
+  width: 30%;
+  height: 10%;
+  display: flex;
+  background-color: #fff;
   flex-direction: column;
   align-items: center;
   bottom: 0;
@@ -58,6 +86,21 @@
   border-radius: 0.5rem;
   z-index: 1001;
   padding: 1rem;
+  color: #80889d;
+  font-size: 1.5rem;
+  box-shadow: 0 0 7px 2px#1370b9;
+}
+
+.closeIcon {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 10000;
+  cursor: pointer;
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
+  outline: none;
 }
 
 .modalRoute {
@@ -65,13 +108,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0.5rem;
   gap: 0.5rem;
 }
 
 .modalRoute_route {
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
   width: 100%;
   align-items: center;
   justify-content: center;
@@ -86,11 +128,20 @@
   padding: 0.5rem;
   box-sizing: border-box;
   font-size: 1.3rem;
+  background-color: #eaeaea;
+  color: #80889d;
 }
 
 .qrCodeWrapper {
-  width: 128px;
-  height: 128px;
+  width: 256px;
+  height: 256px;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  align-items: center;
+  justify-content: center;
 }
 
 .modalRoute_cards {
@@ -98,8 +149,14 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   padding: 0.5rem;
-  height: 180px;
+  height: 220px;
   overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+.distance {
+  color: #1370b9;
+  height: 24px;
 }
 
 .modalRoute_cards_room {
@@ -125,6 +182,23 @@
   gap: 0.5rem;
 }
 
+.romm_btn {
+  padding: 0.5rem;
+  font-size: 1rem;
+  background-color: #eaeaea;
+  border: none;
+  border-radius: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  color: #80889d;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.room_btn:hover {
+  border: 1px solid #eaeaea;
+}
+
 .route-modal {
   position: fixed;
   bottom: 0;
@@ -135,16 +209,63 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   transition: height 0.3s ease-in-out; /* Анимация изменения высоты */
   overflow: hidden;
   transform: translateX(-50%);
   border-radius: 0.5rem 0.5rem 0 0;
   z-index: 1001;
-  background-color: #4d536a;
+  background-color: #fff;
+  box-shadow: 0 0 13px 2px#1370b9;
+}
+
+.route-modal-bef {
+  width: 100%;
+  height: 15px;
+  cursor: pointer;
+}
+
+.route-modal-bef::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 100px;
+  height: 8px;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  background-color: #c7c9cf;
+}
+
+@media screen and (max-width: 768px) {
+  .route-modal {
+    width: 90%;
+  }
 }
 
 .route-modal.open {
   height: 350px; /* Высота открытого модального окна */
   border-radius: 0.5rem;
+}
+.roomTag {
+  background-color: #eaeaea;
+  color: #80889d;
+  border-radius: 16px;
+  padding: 10px 15px 10px 15px;
+  min-width: 70px;
+}
+
+.roomTag:hover {
+  /* color: #dfe3ea; */
+  box-shadow: 0 0 2px 1px #dfe3ea;
+}
+
+.downloadBtn {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  background-color: #eaeaea;
+  border: none;
+  color: #80889d;
+  font-size: 1rem;
 }

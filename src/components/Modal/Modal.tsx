@@ -1,5 +1,6 @@
 import { useState, type FC, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { CloseIcon } from "../Icons/CloseIcon";
 
 interface IModal {
   renderProp: (setIsOpen: (value: boolean) => void) => ReactNode;
@@ -15,7 +16,10 @@ export const Modal: FC<IModal> = ({ renderProp, children }) => {
       {open && (
         <>
           {createPortal(
-            <div onClick={(e) => e.stopPropagation()} className="modal ">
+            <div onClick={(e) => e.stopPropagation()} className={"modal"}>
+              <button className="closeIcon" onClick={() => setIsOpen(false)}>
+                <CloseIcon />
+              </button>
               {renderProp(setIsOpen)}
             </div>,
             document.body

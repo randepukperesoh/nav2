@@ -4,7 +4,8 @@ import dots from "../assets/names.json";
 export const useSearchRoom = () => {
   const [searchName, setSearchName] = useState("");
 
-  const filteredDots = dots.names.filter((dot) =>
+  const allDots = dots.names.flat();
+  const filteredDots = allDots.filter((dot) =>
     dot.name.toLowerCase().includes(searchName.toLowerCase())
   );
 
