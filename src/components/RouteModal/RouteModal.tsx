@@ -111,6 +111,17 @@ export const RouteModal: FC<IRouteModal> = ({
                   <div className="qrCodeWrapper">
                     <QRCodeSVG
                       ref={qrRef}
+                      bgColor={"#ffffff"}
+                      fgColor={"#1370b9"}
+                      imageSettings={{
+                        src: "/logo.png",
+                        x: undefined,
+                        y: undefined,
+                        height: 64,
+                        width: 64,
+                        opacity: 1,
+                        excavate: true,
+                      }}
                       value={`https://nav.donstu.ru ?start=${startId}&end=${endId}`}
                       size={256}
                     />
