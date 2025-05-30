@@ -17,7 +17,7 @@ interface IRouteModal {
   step: number;
   handleNextStep: () => void;
   handlePrevStep: () => void;
-  microRoute: DirectionStep[]
+  microRoute: DirectionStep[];
 }
 
 const MockDirection: Record<string, ReactNode> = {
@@ -26,7 +26,7 @@ const MockDirection: Record<string, ReactNode> = {
   прямо: <UpIcon />,
   "начало маршрута": <PointIcon />,
   "конец маршрута": <PointIcon />,
-  "лестница": <Stairs/>
+  лестница: <Stairs />,
 };
 
 export const RouteModal: FC<IRouteModal> = ({
@@ -111,8 +111,8 @@ export const RouteModal: FC<IRouteModal> = ({
                         src: "/logo.png",
                         x: undefined,
                         y: undefined,
-                        height: 64,
-                        width: 64,
+                        height: 32,
+                        width: 32,
                         opacity: 1,
                         excavate: true,
                       }}
