@@ -4,10 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
-// Константы для настройки плавности
-const SMOOTHNESS = 0.10; // Более плавное управление
+const SMOOTHNESS = 0.10;
 const RETURN_DELAY = 3000;
-const TRANSITION_TIME = 1500; // Увеличили время анимации
+const TRANSITION_TIME = 1500;
 
 export const Camera = ({
   position = [0.5, 70, 33.5],
@@ -20,20 +19,20 @@ export const Camera = ({
   const controlsRef = useRef<any>(null);
   const [userControlling, setUserControlling] = useState(false);
   const lastInteraction = useRef(Date.now());
-  const animationRef = useRef<number>(undefined);
+  const animationRef = useRef<number>();
 
-  // Состояния для плавного перехода
-  const [autoPosition, setAutoPosition] = useState(new THREE.Vector3(...position));
-  const [autoTarget, setAutoTarget] = useState(new THREE.Vector3(...target));
+  // Используем рефы вместо стейта для текущих целей
+  const targetPosRef = useRef(new THREE.Vector3(...position));
+  const targetLookAtRef = useRef(new THREE.Vector3(...target));
 
   // Инициализация
   useEffect(() => {
-    camera.position.copy(autoPosition);
-    camera.lookAt(autoTarget);
+    camera.position.copy(targetPosRef.current);
+    camera.lookAt(targetLookAtRef.current);
 
     const controls = controlsRef.current;
     if (controls) {
-      controls.target.copy(autoTarget);
+      controls.target.copy(targetLookAtRef.current);
       controls.update();
 
       const onStart = () => {
@@ -61,17 +60,24 @@ export const Camera = ({
   const checkAutoReturn = () => {
     if (Date.now() - lastInteraction.current >= RETURN_DELAY) {
       setUserControlling(false);
-      startAnimation();
+      // Используем актуальные цели из пропсов
+      startAnimation(
+        new THREE.Vector3(...targetPosRef.current),
+        new THREE.Vector3(...targetLookAtRef.current)
+      );
     }
   };
 
-  // Обновление целевых точек
+  // Обновление рефов при изменении пропсов
   useEffect(() => {
-    setAutoPosition(new THREE.Vector3(...position));
-    setAutoTarget(new THREE.Vector3(...target));
+    targetPosRef.current.set(...position);
+    targetLookAtRef.current.set(...target);
     
     if (!userControlling) {
-      startAnimation();
+      startAnimation(
+        new THREE.Vector3(...position),
+        new THREE.Vector3(...target)
+      );
     }
   }, [position, target]);
 
@@ -82,11 +88,11 @@ export const Camera = ({
     }
   };
 
-  const startAnimation = () => {
+  const startAnimation = (targetPos: THREE.Vector3, targetLookAt: THREE.Vector3) => {
     cancelAnimation();
 
     const startPos = new THREE.Vector3().copy(camera.position);
-    const startTarget = new THREE.Vector3().copy(controlsRef.current?.target || autoTarget);
+    const startTarget = new THREE.Vector3().copy(controlsRef.current?.target || targetLookAt);
     
     let startTime: number | null = null;
 
@@ -97,12 +103,10 @@ export const Camera = ({
 
       const easedProgress = easeInOutCubic(progress);
       
-      // Плавное перемещение камеры
-      camera.position.lerpVectors(startPos, autoPosition, easedProgress);
+      camera.position.lerpVectors(startPos, targetPos, easedProgress);
       
       if (controlsRef.current) {
-        // Плавное перемещение цели
-        controlsRef.current.target.lerpVectors(startTarget, autoTarget, easedProgress);
+        controlsRef.current.target.lerpVectors(startTarget, targetLookAt, easedProgress);
         controlsRef.current.update();
       }
 
@@ -117,7 +121,6 @@ export const Camera = ({
   const easeInOutCubic = (t: number) => {
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   };
-
 
   return (
     <>
