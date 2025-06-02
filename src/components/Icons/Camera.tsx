@@ -5,12 +5,12 @@ import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 // Константы для настройки плавности
-const SMOOTHNESS = 0.1; // Чем меньше, тем плавнее (0.05-0.2)
-const RETURN_DELAY = 3000; // 3 сек до возврата в авторежим
-const TRANSITION_TIME = 1500; // 1.5 сек на перемещение
+const SMOOTHNESS = 0.10; // Более плавное управление
+const RETURN_DELAY = 3000;
+const TRANSITION_TIME = 1500; // Увеличили время анимации
 
 export const Camera = ({
-  position = [0.5, 100, 33.5],
+  position = [0.5, 70, 33.5],
   target = [0.5, 0, 33.5],
 }: {
   position: Position;
@@ -20,67 +20,59 @@ export const Camera = ({
   const controlsRef = useRef<any>(null);
   const [userControlling, setUserControlling] = useState(false);
   const lastInteraction = useRef(Date.now());
-  const animationRef = useRef<number | undefined>(0);
+  const animationRef = useRef<number>(undefined);
 
-  // Точки для плавного перемещения
-  const targetPoints = {
-    startPos: new THREE.Vector3().copy(camera.position),
-    endPos: new THREE.Vector3(...position),
-    startTarget: new THREE.Vector3().copy(
-      controlsRef.current?.target || new THREE.Vector3()
-    ),
-    endTarget: new THREE.Vector3(...target),
-  };
+  // Состояния для плавного перехода
+  const [autoPosition, setAutoPosition] = useState(new THREE.Vector3(...position));
+  const [autoTarget, setAutoTarget] = useState(new THREE.Vector3(...target));
 
-  // Инициализация и обработчики
+  // Инициализация
   useEffect(() => {
-    camera.position.set(...position);
-    camera.lookAt(new THREE.Vector3(...target));
+    camera.position.copy(autoPosition);
+    camera.lookAt(autoTarget);
 
     const controls = controlsRef.current;
     if (controls) {
-      controls.target.set(...target);
+      controls.target.copy(autoTarget);
       controls.update();
 
-      const onControlStart = () => {
+      const onStart = () => {
         setUserControlling(true);
         lastInteraction.current = Date.now();
         cancelAnimation();
       };
 
-      const onControlEnd = () => {
+      const onEnd = () => {
         lastInteraction.current = Date.now();
-        setTimeout(() => {
-          if (Date.now() - lastInteraction.current >= RETURN_DELAY) {
-            setUserControlling(false);
-            startAnimation();
-          }
-        }, RETURN_DELAY);
+        setTimeout(checkAutoReturn, RETURN_DELAY);
       };
 
-      controls.addEventListener("start", onControlStart);
-      controls.addEventListener("end", onControlEnd);
+      controls.addEventListener('start', onStart);
+      controls.addEventListener('end', onEnd);
 
       return () => {
-        controls.removeEventListener("start", onControlStart);
-        controls.removeEventListener("end", onControlEnd);
+        controls.removeEventListener('start', onStart);
+        controls.removeEventListener('end', onEnd);
         cancelAnimation();
       };
     }
   }, []);
 
-  // Обновление точек перемещения при изменении позиции/цели
+  const checkAutoReturn = () => {
+    if (Date.now() - lastInteraction.current >= RETURN_DELAY) {
+      setUserControlling(false);
+      startAnimation();
+    }
+  };
+
+  // Обновление целевых точек
   useEffect(() => {
-    if (userControlling) return;
-
-    targetPoints.startPos.copy(camera.position);
-    targetPoints.endPos.set(...position);
-    targetPoints.startTarget.copy(
-      controlsRef.current?.target || new THREE.Vector3()
-    );
-    targetPoints.endTarget.set(...target);
-
-    startAnimation();
+    setAutoPosition(new THREE.Vector3(...position));
+    setAutoTarget(new THREE.Vector3(...target));
+    
+    if (!userControlling) {
+      startAnimation();
+    }
   }, [position, target]);
 
   const cancelAnimation = () => {
@@ -93,6 +85,9 @@ export const Camera = ({
   const startAnimation = () => {
     cancelAnimation();
 
+    const startPos = new THREE.Vector3().copy(camera.position);
+    const startTarget = new THREE.Vector3().copy(controlsRef.current?.target || autoTarget);
+    
     let startTime: number | null = null;
 
     const animate = (currentTime: number) => {
@@ -100,38 +95,29 @@ export const Camera = ({
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / TRANSITION_TIME, 1);
 
-      // Плавное движение с easing
       const easedProgress = easeInOutCubic(progress);
-
-      camera.position.lerpVectors(
-        targetPoints.startPos,
-        targetPoints.endPos,
-        easedProgress
-      );
-
+      
+      // Плавное перемещение камеры
+      camera.position.lerpVectors(startPos, autoPosition, easedProgress);
+      
       if (controlsRef.current) {
-        controlsRef.current.target.lerpVectors(
-          targetPoints.startTarget,
-          targetPoints.endTarget,
-          easedProgress
-        );
+        // Плавное перемещение цели
+        controlsRef.current.target.lerpVectors(startTarget, autoTarget, easedProgress);
         controlsRef.current.update();
       }
 
       if (progress < 1) {
         animationRef.current = requestAnimationFrame(animate);
-      } else {
-        animationRef.current = undefined;
       }
     };
 
     animationRef.current = requestAnimationFrame(animate);
   };
 
-  // Функция плавности (easing)
   const easeInOutCubic = (t: number) => {
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   };
+
 
   return (
     <>

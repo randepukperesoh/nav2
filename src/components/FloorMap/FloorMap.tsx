@@ -47,7 +47,7 @@ const FloorMap = () => {
     if (microRoute && microRoute.length > 0) {
       const newPosition = [
         microRoute[step].coordinates[0],
-        100, // Фиксированная высота камеры
+        70, // Фиксированная высота камеры
         microRoute[step].coordinates[2],
       ] as Position;
 
