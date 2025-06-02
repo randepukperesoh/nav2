@@ -16,7 +16,11 @@ export const Modal: FC<IModal> = ({ renderProp, children }) => {
       {open && (
         <>
           {createPortal(
-            <div onClick={(e) => e.stopPropagation()} className={"modal"}>
+            <div
+              style={{ height: "unset" }}
+              onClick={(e) => e.stopPropagation()}
+              className={"modal"}
+            >
               <button className="closeIcon" onClick={() => setIsOpen(false)}>
                 <CloseIcon />
               </button>
