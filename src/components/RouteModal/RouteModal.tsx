@@ -92,11 +92,21 @@ export const RouteModal: FC<IRouteModal> = ({
         <div className="modal-content">
           <div className="modalRoute">
             <div className="modalRoute_route">
-              <div onClick={() => {setStartId(null)}} className="roomTag">
+              <div
+                onClick={() => {
+                  setStartId(null);
+                }}
+                className="roomTag"
+              >
                 {startId}
               </div>
               <RouteIcon />
-              <div onClick={() => {setEndId(null)}} className="roomTag">
+              <div
+                onClick={() => {
+                  setEndId(null);
+                }}
+                className="roomTag"
+              >
                 {endId}
               </div>
 
@@ -156,11 +166,12 @@ export const RouteModal: FC<IRouteModal> = ({
             )}
             {microRoute?.length !== 0 && (
               <>
-                <div>{MockDirection[microRoute?.[step].direction]}</div>
+                <div>{MockDirection[microRoute?.[step]?.direction] || ""}</div>
 
                 <div className="distance">
-                  {microRoute?.[step].distance !== 0 &&
-                    microRoute?.[step].distance + " метров"}
+                  {microRoute && microRoute[step] && microRoute[step].distance
+                    ? microRoute?.[step]?.distance + " метров"
+                    : ""}
                 </div>
 
                 <div className="modal_room_btns">

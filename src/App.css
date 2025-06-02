@@ -93,8 +93,8 @@
 
 .closeIcon {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 0.25rem;
+  right: 0.25rem;
   z-index: 10000;
   cursor: pointer;
   background-color: transparent;
@@ -209,7 +209,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
+  gap: 0.6rem;
   transition: height 0.3s ease-in-out; /* Анимация изменения высоты */
   overflow: hidden;
   transform: translateX(-50%);
@@ -217,6 +218,12 @@
   z-index: 1001;
   background-color: #fff;
   box-shadow: 0 0 13px 2px#1370b9;
+}
+
+@media screen and (max-width: 768px) {
+  .route-modal {
+    min-width: 340px;
+  }
 }
 
 .route-modal-bef {
@@ -244,16 +251,20 @@
 }
 
 .route-modal.open {
-  height: 350px; /* Высота открытого модального окна */
+  height: max-content;
   border-radius: 0.5rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
 }
 .roomTag {
   background-color: #eaeaea;
   color: #80889d;
   border-radius: 16px;
-  padding: 10px 15px 10px 15px;
+  padding: 0.5rem 0.35rem;
   min-width: 70px;
   height: fit-content;
+  min-height: 44px;
+  box-sizing: border-box;
 }
 
 .roomTag:hover {

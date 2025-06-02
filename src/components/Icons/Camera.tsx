@@ -2,7 +2,7 @@ import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import type { Position } from "../../types";
 import { useEffect, useRef, useState } from "react";
 import { useThree } from "@react-three/fiber";
-import * as THREE from 'three';
+import * as THREE from "three";
 
 // Константы для настройки плавности
 const SMOOTHNESS = 0.1; // Чем меньше, тем плавнее (0.05-0.2)
@@ -10,7 +10,7 @@ const RETURN_DELAY = 3000; // 3 сек до возврата в авторежи
 const TRANSITION_TIME = 1500; // 1.5 сек на перемещение
 
 export const Camera = ({
-  position = [0.5, 100, 33.5],
+  position = [0.5, 300, 33.5],
   target = [0.5, 0, 33.5],
 }: {
   position: Position;
@@ -26,8 +26,10 @@ export const Camera = ({
   const targetPoints = {
     startPos: new THREE.Vector3().copy(camera.position),
     endPos: new THREE.Vector3(...position),
-    startTarget: new THREE.Vector3().copy(controlsRef.current?.target || new THREE.Vector3()),
-    endTarget: new THREE.Vector3(...target)
+    startTarget: new THREE.Vector3().copy(
+      controlsRef.current?.target || new THREE.Vector3()
+    ),
+    endTarget: new THREE.Vector3(...target),
   };
 
   // Инициализация и обработчики
@@ -56,12 +58,12 @@ export const Camera = ({
         }, RETURN_DELAY);
       };
 
-      controls.addEventListener('start', onControlStart);
-      controls.addEventListener('end', onControlEnd);
+      controls.addEventListener("start", onControlStart);
+      controls.addEventListener("end", onControlEnd);
 
       return () => {
-        controls.removeEventListener('start', onControlStart);
-        controls.removeEventListener('end', onControlEnd);
+        controls.removeEventListener("start", onControlStart);
+        controls.removeEventListener("end", onControlEnd);
         cancelAnimation();
       };
     }
@@ -73,7 +75,9 @@ export const Camera = ({
 
     targetPoints.startPos.copy(camera.position);
     targetPoints.endPos.set(...position);
-    targetPoints.startTarget.copy(controlsRef.current?.target || new THREE.Vector3());
+    targetPoints.startTarget.copy(
+      controlsRef.current?.target || new THREE.Vector3()
+    );
     targetPoints.endTarget.set(...target);
 
     startAnimation();
@@ -88,9 +92,9 @@ export const Camera = ({
 
   const startAnimation = () => {
     cancelAnimation();
-    
+
     let startTime: number | null = null;
-    
+
     const animate = (currentTime: number) => {
       if (!startTime) startTime = currentTime;
       const elapsed = currentTime - startTime;
@@ -98,13 +102,13 @@ export const Camera = ({
 
       // Плавное движение с easing
       const easedProgress = easeInOutCubic(progress);
-      
+
       camera.position.lerpVectors(
         targetPoints.startPos,
         targetPoints.endPos,
         easedProgress
       );
-      
+
       if (controlsRef.current) {
         controlsRef.current.target.lerpVectors(
           targetPoints.startTarget,
@@ -129,22 +133,17 @@ export const Camera = ({
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   };
 
-
   return (
     <>
       <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 20, 10]} intensity={1} />
-      <PerspectiveCamera
-        makeDefault
-        near={0.1}
-        far={1000}
-      />
+      <directionalLight position={[10, 40, 10]} intensity={1} />
+      <PerspectiveCamera makeDefault near={0.1} far={1000} />
       <OrbitControls
         ref={controlsRef}
         makeDefault
         enabled={true}
         minDistance={30}
-        maxDistance={300}
+        maxDistance={400}
         minPolarAngle={0}
         maxPolarAngle={0}
         minAzimuthAngle={-0}

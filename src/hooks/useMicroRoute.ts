@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouteStore } from "../components/store/store";
 import type { Position } from "../types";
 import { useFloorLoader } from "./useFloorLoader";
@@ -8,7 +8,7 @@ export type DirectionStep = {
   distance: string | number;
   coordinates: Position;
   floor: number;
-}
+};
 
 type MicroRouteResult = {
   step: number;
@@ -16,7 +16,7 @@ type MicroRouteResult = {
   handlePrevStep: () => void;
   directions: DirectionStep[];
   currentFloor: number;
-}
+};
 
 const getFloorFromY = (y: number): number => {
   if (y >= -8 && y <= 2) return 0;
@@ -90,20 +90,24 @@ export const useMicroRoute = (): MicroRouteResult => {
   const { route } = useRouteStore();
   const { handleChangeFloor, floorNumber } = useFloorLoader();
 
+  useEffect(() => {
+    setStep(0);
+  }, [route]);
+
   if (!Array.isArray(route) || route.length < 3) {
     return {
       step: 0,
       handleNextStep: () => {},
       handlePrevStep: () => {},
       directions: [],
-      currentFloor: 0
+      currentFloor: 0,
     };
   }
 
   const directions: DirectionStep[] = [];
   let distanceToNextTurn = 0;
-  let lastPoint = route[0]; 
-  let currentFloor = getFloorFromY(route[0][1])
+  let lastPoint = route[0];
+  let currentFloor = getFloorFromY(route[0][1]);
 
   for (let i = 1; i < route.length - 1; i++) {
     const { angle, direction } = calculateAngleAndDirection(
@@ -112,7 +116,7 @@ export const useMicroRoute = (): MicroRouteResult => {
       route[i + 1]
     );
     const distanceSegment = calculateDistance(route[i - 1], route[i]);
-    const pointFloor = getFloorFromY(route[i][1])
+    const pointFloor = getFloorFromY(route[i][1]);
 
     distanceToNextTurn += distanceSegment;
 
@@ -121,18 +125,18 @@ export const useMicroRoute = (): MicroRouteResult => {
         directions.push({
           direction: "прямо",
           distance: distanceToNextTurn.toFixed(2),
-          coordinates: lastPoint, 
-          floor: currentFloor
+          coordinates: lastPoint,
+          floor: currentFloor,
         });
       }
       directions.push({
         direction: pointFloor !== currentFloor ? "лестница" : direction,
         distance: 0,
         coordinates: route[i], // Координаты точки поворота
-        floor: pointFloor
+        floor: pointFloor,
       });
 
-      currentFloor = pointFloor
+      currentFloor = pointFloor;
       distanceToNextTurn = 0;
       lastPoint = route[i + 1]; // Обновляем последнюю точку
     }
@@ -144,7 +148,7 @@ export const useMicroRoute = (): MicroRouteResult => {
       direction: "прямо",
       distance: distanceToNextTurn.toFixed(2),
       coordinates: lastPoint, // Координаты начала последнего прямого участка
-      floor: currentFloor
+      floor: currentFloor,
     });
   }
 
@@ -153,13 +157,13 @@ export const useMicroRoute = (): MicroRouteResult => {
     direction: "начало маршрута",
     distance: 0,
     coordinates: route[0], // Координаты начала маршрута
-    floor: getFloorFromY(route[0][1])
+    floor: getFloorFromY(route[0][1]),
   });
   directions.push({
     direction: "конец маршрута",
     distance: 0,
     coordinates: route[route.length - 1], // Координаты конца маршрута
-    floor: getFloorFromY(route[route.length - 1][1])
+    floor: getFloorFromY(route[route.length - 1][1]),
   });
 
   const maxLenght = directions.length - 1;
@@ -168,24 +172,30 @@ export const useMicroRoute = (): MicroRouteResult => {
     setStep((prev) => {
       const newStep = prev === maxLenght ? prev : prev + 1;
       const nextFloor = directions[newStep]?.floor;
-      if (nextFloor !== undefined && nextFloor !== floorNumber) { 
-        handleChangeFloor(nextFloor)
-        console.log(nextFloor)
-      }
-      return newStep
-    });
-
-  const handlePrevStep = () =>
-    setStep(prev => {
-      const newStep = prev === 0 ? prev : prev - 1;
-      const prevFloor = directions[newStep]?.floor;
-      if (prevFloor !== undefined && prevFloor !== floorNumber) {
-        handleChangeFloor(prevFloor);
-        console.log(prevFloor)
+      if (nextFloor !== undefined && nextFloor !== floorNumber) {
+        handleChangeFloor(nextFloor);
+        console.log(nextFloor);
       }
       return newStep;
     });
 
-  const res = { step, handleNextStep, handlePrevStep, directions, currentFloor: directions[step]?.floor ?? floorNumber}
+  const handlePrevStep = () =>
+    setStep((prev) => {
+      const newStep = prev === 0 ? prev : prev - 1;
+      const prevFloor = directions[newStep]?.floor;
+      if (prevFloor !== undefined && prevFloor !== floorNumber) {
+        handleChangeFloor(prevFloor);
+        console.log(prevFloor);
+      }
+      return newStep;
+    });
+
+  const res = {
+    step,
+    handleNextStep,
+    handlePrevStep,
+    directions,
+    currentFloor: directions[step]?.floor ?? floorNumber,
+  };
   return res;
 };

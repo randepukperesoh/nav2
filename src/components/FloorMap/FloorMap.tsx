@@ -25,7 +25,9 @@ const FloorMap = () => {
 
   const { shortestPath: routes } = useShortestPath(startId, endId);
 
-  const [cameraPosition, setCameraPosition] = useState<Position>([0.5, 100, 33.5]);
+  const [cameraPosition, setCameraPosition] = useState<Position>([
+    0.5, 100, 33.5,
+  ]);
   const [cameraTarget, setCameraTarget] = useState<Position>([0.5, 0, 33.5]);
 
   useGetPathFromParam();
@@ -40,8 +42,6 @@ const FloorMap = () => {
   const shinyMaterial = new MeshBasicMaterial({
     color: "#edeef0",
   });
-
-  // console.log({ microRoute });
 
   useEffect(() => {
     if (microRoute && microRoute.length > 0) {
@@ -95,10 +95,7 @@ const FloorMap = () => {
         {routes.length > 0 && (
           <AnimatedLine floorNumber={floorNumber} points={routes} />
         )}
-        <Camera
-          position={cameraPosition}
-          target={cameraTarget}
-        />
+        <Camera position={cameraPosition} target={cameraTarget} />
         <Plane
           position={[0, -10, -10]}
           material={shinyMaterial}
