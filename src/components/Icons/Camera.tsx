@@ -10,7 +10,7 @@ const RETURN_DELAY = 3000; // 3 сек до возврата в авторежи
 const TRANSITION_TIME = 1500; // 1.5 сек на перемещение
 
 export const Camera = ({
-  position = [0.5, 300, 33.5],
+  position = [0.5, 100, 33.5],
   target = [0.5, 0, 33.5],
 }: {
   position: Position;
@@ -137,7 +137,7 @@ export const Camera = ({
     <>
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 40, 10]} intensity={1} />
-      <PerspectiveCamera makeDefault near={0.1} far={1000} />
+      <PerspectiveCamera near={0.1} far={1000} />
       <OrbitControls
         ref={controlsRef}
         makeDefault

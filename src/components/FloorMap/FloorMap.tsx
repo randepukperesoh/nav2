@@ -26,7 +26,7 @@ const FloorMap = () => {
   const { shortestPath: routes } = useShortestPath(startId, endId);
 
   const [cameraPosition, setCameraPosition] = useState<Position>([
-    0.5, 100, 33.5,
+    0.5, 70, 33.5,
   ]);
   const [cameraTarget, setCameraTarget] = useState<Position>([0.5, 0, 33.5]);
 
