@@ -3,6 +3,7 @@ import { Modal } from "../ThreeModal/Modal";
 import { Text } from "@react-three/drei";
 import { useRouteStore } from "../store/store";
 import { PlaneRoom } from "./PlaneRoom";
+import { animated } from "@react-spring/three";
 
 export interface IDot {
   position: [number, number, number];
@@ -19,17 +20,16 @@ interface IRoom {
 
 export const Room: FC<IRoom> = ({ room, openModalName, setOpenModalName }) => {
   const { position, name, args, rotation } = room;
-
   const { setStartId, setEndId } = useRouteStore();
-
   const isOpen = openModalName === name;
 
   return (
-    <mesh key={name} position={position}>
+    <animated.mesh key={name} position={position}>
       <Modal
+        currentRoom={name} // Передаем текущую комнату
         setModalName={() => setOpenModalName(name)}
         isOpen={isOpen}
-        setOpenModalName={() => setOpenModalName(null)}
+        setOpenModalName={setOpenModalName}
         renderProp={(handleClose) => (
           <div className="modal_room">
             <div>{name}</div>
@@ -64,6 +64,6 @@ export const Room: FC<IRoom> = ({ room, openModalName, setOpenModalName }) => {
       >
         {name}
       </Text>
-    </mesh>
+    </animated.mesh>
   );
 };

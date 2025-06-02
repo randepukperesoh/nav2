@@ -253,6 +253,7 @@
   border-radius: 16px;
   padding: 10px 15px 10px 15px;
   min-width: 70px;
+  height: fit-content;
 }
 
 .roomTag:hover {

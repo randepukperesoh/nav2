@@ -25,8 +25,8 @@ const FloorMap = () => {
 
   const { shortestPath: routes } = useShortestPath(startId, endId);
 
-  const [cameraPosition, setCameraPosition] = useState<Position>([0, 100, 0]);
-  const [cameraTarget, setCameraTarget] = useState<Position>([0, 0, 0]);
+  const [cameraPosition, setCameraPosition] = useState<Position>([0.5, 100, 33.5]);
+  const [cameraTarget, setCameraTarget] = useState<Position>([0.5, 0, 33.5]);
 
   useGetPathFromParam();
 
@@ -47,7 +47,7 @@ const FloorMap = () => {
     if (microRoute && microRoute.length > 0) {
       const newPosition = [
         microRoute[step].coordinates[0],
-        200, // Фиксированная высота камеры
+        100, // Фиксированная высота камеры
         microRoute[step].coordinates[2],
       ] as Position;
 
