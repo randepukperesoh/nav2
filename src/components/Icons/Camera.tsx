@@ -19,7 +19,7 @@ export const Camera = ({
   const controlsRef = useRef<any>(null);
   const [userControlling, setUserControlling] = useState(false);
   const lastInteraction = useRef(Date.now());
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(undefined);
 
   // Используем рефы вместо стейта для текущих целей
   const targetPosRef = useRef(new THREE.Vector3(...position));
