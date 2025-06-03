@@ -1,6 +1,6 @@
 import { Line } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo, type JSX } from "react";
 
 const getFloorFromY = (y: number): number => {
   if (y >= -8 && y <= 2) return 0;
@@ -13,6 +13,43 @@ const getFloorFromY = (y: number): number => {
   if (y >= 51 && y <= 61) return 7;
   if (y >= 59 && y <= 69) return 8;
   return -1;
+};
+
+const Arrow = ({ position, direction, color = "red" }: { 
+  position: [number, number, number]; 
+  direction: 'up' | 'down';
+  color?: string;
+}) => {
+  const size = 1.5;
+  const headSize = size * 0.6;
+  
+  // Создаем 2D стрелку (вид сверху)
+  const points: [number, number, number][] = [
+    // Линия стрелки (основание)
+    [-size, 0, 0],
+    [size/2, 0, 0],
+    
+    // Головка стрелки (треугольник)
+    [size/2, 0, 0],
+    [size/2 - headSize, 0, -headSize],
+    
+    [size/2, 0, 0],
+    [size/2 - headSize, 0, headSize],
+  ];
+
+  // Поворачиваем стрелку если направление вниз
+  const rotationY = direction === 'down' ? Math.PI : 0;
+
+  return (
+    <group position={position}>
+      <Line
+        points={points}
+        color={color}
+        lineWidth={3}
+        rotation={[0, rotationY + Math.PI/2, 0]}
+      />
+    </group>
+  );
 };
 
 export const AnimatedLine = ({ 
@@ -48,7 +85,7 @@ export const AnimatedLine = ({
       
       // Разрыв сегмента при:
       // 1. Смене этажа
-      const shouldBreak = currentFloor !== prevFloor
+      const shouldBreak = currentFloor !== prevFloor;
 
       if (shouldBreak && currentSegment.length > 0) {
         result.push(currentSegment);
@@ -97,32 +134,50 @@ export const AnimatedLine = ({
     setDisplayedSegments(newSegments);
   });
 
-  // Собираем линии для рендера
-  const lines = useMemo(() => {
-    return displayedSegments.flatMap(segment => {
-      const lines = [];
-      for (let i = 1; i < segment.length; i++) {
-        lines.push([segment[i-1], segment[i]]);
+  // Собираем линии и стрелки для рендера
+  const linesAndArrows = useMemo(() => {
+    const result: JSX.Element[] = [];
+    
+    displayedSegments.forEach(segment => {
+      // Обработка сегментов с одной точкой (отображаем как стрелку)
+      if (segment.length === 1) {
+        const point = segment[0];
+        const pointIndex = points.findIndex(p => p[0] === point[0] && p[1] === point[1] && p[2] === point[2]);
+        
+        if (pointIndex >= 0 && pointIndex < points.length - 1) {
+          const nextPoint = points[pointIndex + 1];
+          const direction = nextPoint[1] > point[1] ? 'up' : 'down';
+          result.push(
+            <Arrow 
+              key={`arrow-${pointIndex}`} 
+              position={point} 
+              direction={direction} 
+            />
+          );
+        }
       }
-      return lines;
+      // Обработка обычных сегментов (линии)
+      else if (segment.length > 1) {
+        for (let i = 1; i < segment.length; i++) {
+          result.push(
+            <Line
+              key={`line-${i}`}
+              points={[segment[i-1], segment[i]]}
+              color="red"
+              dashed
+              dashSize={2}
+              gapSize={2}
+              lineWidth={6}
+            />
+          );
+        }
+      }
     });
-  }, [displayedSegments]);
 
-  if (lines.length === 0) return null;
+    return result;
+  }, [displayedSegments, points]);
 
-  return (
-    <group>
-      {lines.map(([start, end], index) => (
-        <Line
-          key={`line-${index}`}
-          points={[start, end]}
-          color="red"
-          dashed
-          dashSize={2}
-          gapSize={2}
-          lineWidth={6}
-        />
-      ))}
-    </group>
-  );
+  if (linesAndArrows.length === 0) return null;
+
+  return <group>{linesAndArrows}</group>;
 };

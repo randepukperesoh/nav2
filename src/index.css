@@ -48,7 +48,7 @@ body {
   scrollbar-color: #888 #f1f1f1; /* Цвет ползунка и фона трека */
 }
 
-.loader {
+/* .loader {
   position: relative;
   width: 120px;
   height: 90px;
@@ -75,7 +75,7 @@ body {
   border-radius: 4px;
   box-shadow: 0 5px 0 #fff, -35px 50px 0 #fff, -70px 95px 0 #fff;
   animation: loading-step 1s ease-in-out infinite;
-}
+} */
 
 @keyframes loading-bounce {
   0% {

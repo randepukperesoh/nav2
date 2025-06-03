@@ -1,4 +1,4 @@
-import { useRef, useState, type FC, type ReactNode } from "react";
+import { useRef, useState, type FC, type ReactNode, type TouchEvent } from "react";
 import { RouteIcon } from "../Room/RouteIcon";
 import { useSearchRoom } from "../../hooks/useSearchRoom";
 import { useRouteStore } from "../store/store";
@@ -36,6 +36,7 @@ export const RouteModal: FC<IRouteModal> = ({
   step,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [startY, setStartY] = useState<number | null>(null);
 
   const qrRef = useRef<SVGSVGElement>(null);
 
@@ -46,6 +47,30 @@ export const RouteModal: FC<IRouteModal> = ({
   const { endId, startId, setEndId, setStartId } = useRouteStore();
 
   const { filteredDots, searchName, setSearchName } = useSearchRoom();
+
+   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+      setStartY(e.touches[0].clientY);
+    };
+
+    const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+      if (startY === null) return;
+      
+      const currentY = e.touches[0].clientY;
+      const diff = startY - currentY;
+      
+      if (diff > 50) { // Порог свайпа вверх
+        setIsOpen(true);
+        setStartY(null);
+      }
+      if (diff < -50) {
+        setIsOpen(false)
+        setStartY(null)
+      }
+    };
+
+    const handleTouchEnd = () => {
+      setStartY(null);
+    };
 
   const downloadQRCode = () => {
     const element = qrRef.current;
@@ -86,7 +111,7 @@ export const RouteModal: FC<IRouteModal> = ({
   };
 
   return (
-    <div className={`route-modal ${isOpen ? "open" : ""}`}>
+    <div onTouchEnd={handleTouchEnd} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} className={`route-modal ${microRoute && microRoute.length > 0 ? "route" : ""} ${isOpen ? "open" : ""}`}>
       <div className="route-modal-bef" onClick={toggleModal}></div>
       {isOpen && (
         <div className="modal-content">
@@ -151,7 +176,7 @@ export const RouteModal: FC<IRouteModal> = ({
                 </div>
 
                 <div className="modalRoute_cards">
-                  {filteredDots.map((el, i) => (
+                  {[{name: "Конгрессхол 1 этаж"}, {name: "Точка кипения"}, {name: "Коворкинг Гараж"}, {name: 'Медиапарк'} , ...filteredDots].map((el, i) => (
                     <RoomTag
                       key={el.name + "_" + i}
                       name={el.name}

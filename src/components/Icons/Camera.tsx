@@ -3,27 +3,33 @@ import type { Position } from "../../types";
 import { useEffect, useRef, useState } from "react";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { useRouteStore } from "../store/store";
+import { getFloorDefaultPosition } from "../FloorMap/FloorMap";
 
 const SMOOTHNESS = 0.10;
-const RETURN_DELAY = 3000;
+const RETURN_DELAY = 4500;
 const TRANSITION_TIME = 1500;
 
 export const Camera = ({
   position = [0.5, 70, 33.5],
   target = [0.5, 0, 33.5],
+  floorNumber,
 }: {
   position: Position;
   target: Position;
+  floorNumber: number;
 }) => {
   const { camera } = useThree();
   const controlsRef = useRef<any>(null);
   const [userControlling, setUserControlling] = useState(false);
   const lastInteraction = useRef(Date.now());
   const animationRef = useRef<number>(undefined);
+  const {setCurrentFloor, currentFloor} = useRouteStore()
 
   // Используем рефы вместо стейта для текущих целей
   const targetPosRef = useRef(new THREE.Vector3(...position));
   const targetLookAtRef = useRef(new THREE.Vector3(...target));
+  const targetFloor = useRef(floorNumber)
 
   // Инициализация
   useEffect(() => {
@@ -57,14 +63,29 @@ export const Camera = ({
     }
   }, []);
 
+  useEffect(() => {
+    const currentPosition = getFloorDefaultPosition(currentFloor)
+    const currentTarget = [currentPosition[0], 0, currentPosition[2]]
+    console.log(currentPosition, currentTarget)
+    startAnimation(
+      new THREE.Vector3(...currentPosition),
+      new THREE.Vector3(...currentTarget)
+    )
+    lastInteraction.current = Date.now();
+  }, [currentFloor])
+
   const checkAutoReturn = () => {
     if (Date.now() - lastInteraction.current >= RETURN_DELAY) {
       setUserControlling(false);
+
       // Используем актуальные цели из пропсов
       startAnimation(
         new THREE.Vector3(...targetPosRef.current),
         new THREE.Vector3(...targetLookAtRef.current)
       );
+      console.log(targetFloor.current)
+      const newFloor = targetFloor.current
+      setCurrentFloor(newFloor)
     }
   };
 
@@ -72,12 +93,14 @@ export const Camera = ({
   useEffect(() => {
     targetPosRef.current.set(...position);
     targetLookAtRef.current.set(...target);
+    targetFloor.current = floorNumber
     
     if (!userControlling) {
       startAnimation(
         new THREE.Vector3(...position),
         new THREE.Vector3(...target)
       );
+      setCurrentFloor(targetFloor.current)
     }
   }, [position, target]);
 
