@@ -151,7 +151,7 @@ export const RouteModal: FC<IRouteModal> = ({
                         opacity: 1,
                         excavate: true,
                       }}
-                      value={`https://nav.donstu.ru ?start=${startId}&end=${endId}`}
+                      value={`https://nav.donstu.ru?start=${startId}&end=${endId}`}
                       size={256}
                     />
 
