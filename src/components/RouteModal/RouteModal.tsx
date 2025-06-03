@@ -1,4 +1,11 @@
-import { useRef, useState, type FC, type ReactNode, type TouchEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FC,
+  type ReactNode,
+  type TouchEvent,
+} from "react";
 import { RouteIcon } from "../Room/RouteIcon";
 import { useSearchRoom } from "../../hooks/useSearchRoom";
 import { useRouteStore } from "../store/store";
@@ -38,7 +45,11 @@ export const RouteModal: FC<IRouteModal> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [startY, setStartY] = useState<number | null>(null);
 
+  const [focusFlag, setFocusFlag] = useState(0);
+
   const qrRef = useRef<SVGSVGElement>(null);
+
+  const inpRef = useRef<HTMLInputElement>(null);
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -48,29 +59,30 @@ export const RouteModal: FC<IRouteModal> = ({
 
   const { filteredDots, searchName, setSearchName } = useSearchRoom();
 
-   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
-      setStartY(e.touches[0].clientY);
-    };
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+    setStartY(e.touches[0].clientY);
+  };
 
-    const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
-      if (startY === null) return;
-      
-      const currentY = e.touches[0].clientY;
-      const diff = startY - currentY;
-      
-      if (diff > 50) { // Порог свайпа вверх
-        setIsOpen(true);
-        setStartY(null);
-      }
-      if (diff < -50) {
-        setIsOpen(false)
-        setStartY(null)
-      }
-    };
+  const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+    if (startY === null) return;
 
-    const handleTouchEnd = () => {
+    const currentY = e.touches[0].clientY;
+    const diff = startY - currentY;
+
+    if (diff > 50) {
+      // Порог свайпа вверх
+      setIsOpen(true);
       setStartY(null);
-    };
+    }
+    if (diff < -50) {
+      setIsOpen(false);
+      setStartY(null);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setStartY(null);
+  };
 
   const downloadQRCode = () => {
     const element = qrRef.current;
@@ -110,31 +122,50 @@ export const RouteModal: FC<IRouteModal> = ({
     }
   };
 
+  useEffect(() => {
+    inpRef.current?.focus();
+  }, [focusFlag]);
+
   return (
-    <div onTouchEnd={handleTouchEnd} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} className={`route-modal ${microRoute && microRoute.length > 0 ? "route" : ""} ${isOpen ? "open" : ""}`}>
+    <div
+      onTouchEnd={handleTouchEnd}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      className={`route-modal ${
+        microRoute && microRoute.length > 0 ? "route" : ""
+      } ${isOpen ? "open" : ""}`}
+    >
       <div className="route-modal-bef" onClick={toggleModal}></div>
       {isOpen && (
         <div className="modal-content">
           <div className="modalRoute">
             <div className="modalRoute_route">
-              <div
-                onClick={() => {
-                  setStartId(null);
-                }}
-                className="roomTag"
-              >
-                {startId}
+              <div className="modalRoute_route_prefix">
+                <div>От: </div>
+                <div
+                  onClick={() => {
+                    setStartId(null);
+                    setFocusFlag((prev) => prev + 1);
+                  }}
+                  className="roomTag"
+                >
+                  {startId}
+                </div>
               </div>
               <RouteIcon />
-              <div
-                onClick={() => {
-                  setEndId(null);
-                }}
-                className="roomTag"
-              >
-                {endId}
-              </div>
 
+              <div className="modalRoute_route_prefix">
+                <div>До :</div>
+                <div
+                  onClick={() => {
+                    setEndId(null);
+                    setFocusFlag((prev) => prev + 1);
+                  }}
+                  className="roomTag"
+                >
+                  {endId}
+                </div>
+              </div>
               <Modal
                 renderProp={() => (
                   <div className="qrCodeWrapper">
@@ -151,7 +182,7 @@ export const RouteModal: FC<IRouteModal> = ({
                         opacity: 1,
                         excavate: true,
                       }}
-                      value={`https://nav.donstu.ru ?start=${startId}&end=${endId}`}
+                      value={`https://nav.donstu.ru?start=${startId}&end=${endId}`}
                       size={256}
                     />
 
@@ -169,6 +200,7 @@ export const RouteModal: FC<IRouteModal> = ({
               <>
                 <div className="modalRoute_flex">
                   <input
+                    ref={inpRef}
                     className="modalRoute_input"
                     value={searchName}
                     onChange={(e) => setSearchName(e.currentTarget.value)}
@@ -176,7 +208,16 @@ export const RouteModal: FC<IRouteModal> = ({
                 </div>
 
                 <div className="modalRoute_cards">
-                  {[{name: "Конгрессхол 1 этаж"}, {name: "Точка кипения"}, {name: "Коворкинг Гараж"}, {name: 'Медиапарк'} , ...filteredDots].map((el, i) => (
+                  {(!searchName
+                    ? [
+                        { name: "Конгрессхол 1 этаж" },
+                        { name: "Точка кипения" },
+                        { name: "Коворкинг Гараж" },
+                        { name: "Медиапарк" },
+                        ...filteredDots,
+                      ]
+                    : filteredDots
+                  ).map((el, i) => (
                     <RoomTag
                       key={el.name + "_" + i}
                       name={el.name}

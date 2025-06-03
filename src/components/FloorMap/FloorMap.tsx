@@ -1,4 +1,4 @@
-import { Canvas, useLoader, useThree } from "@react-three/fiber";
+import { Canvas, useLoader } from "@react-three/fiber";
 import { useFloorLoader } from "../../hooks/useFloorLoader";
 import { FloorManipulator } from "../FloorManipulator/FloorManipulator";
 import { Room, type IDot } from "../Room/Room";
@@ -13,7 +13,7 @@ import { Html, Plane } from "@react-three/drei";
 import { useMicroRoute } from "../../hooks/useMicroRoute";
 import { useEffect, useState } from "react";
 import type { Position } from "../../types";
-import * as THREE from "three"
+import * as THREE from "three";
 
 export const getFloorDefaultPosition = (floor: number): Position => {
   switch (floor) {
@@ -35,7 +35,7 @@ export const getFloorDefaultPosition = (floor: number): Position => {
       return [90, 130, -50] as Position;
     case 8:
       return [100, 106, -20] as Position;
-    default: 
+    default:
       return [0, 70, 0] as Position;
   }
 };
@@ -47,7 +47,6 @@ const FloorMap = () => {
     handleChangeFloor,
     selectedFloor,
     isLoading,
-    progress,
   } = useFloorLoader();
 
   const { startId, endId } = useRouteStore();
@@ -101,13 +100,11 @@ const FloorMap = () => {
     } else {
       const newPosition = getFloorDefaultPosition(floorNumber);
 
-      const newTarget = [newPosition[0], 0, newPosition[2]] as Position
+      const newTarget = [newPosition[0], 0, newPosition[2]] as Position;
 
       setCameraPosition(newPosition);
       setCameraTarget(newTarget);
     }
-    console.log(microRoute)
-    console.log(step)
   }, [step, floorNumber, startId, endId, routes]);
 
   return (
@@ -125,17 +122,22 @@ const FloorMap = () => {
         microRoute={microRoute}
       />
       <Canvas style={{ background: "#edeef0" }} camera={{ fov: 90 }}>
-        
         {isLoading ? (
           <Html center>
-            <div className="loading-indicator">{`Загрузка моделей ${progress}%`}</div>
+            <span className="loader"></span>
           </Html>
         ) : (
           <>
-            { selectedFloor ? <primitive
-              object={selectedFloor.scene}
-              position={[floorNumber * 5, floorNumber * 5, floorNumber * 5]}
-            /> : <Html center><div>Ошибка загрузки модели этажа. Перезагрузите страницу</div></Html>}
+            {selectedFloor ? (
+              <primitive
+                object={selectedFloor.scene}
+                position={[floorNumber * 5, floorNumber * 5, floorNumber * 5]}
+              />
+            ) : (
+              <Html center>
+                <div>Ошибка загрузки модели этажа. Перезагрузите страницу</div>
+              </Html>
+            )}
             {dots.names[floorNumber].map((el, i) => {
               return (
                 <Room
@@ -152,8 +154,20 @@ const FloorMap = () => {
             )}
           </>
         )}
-        <Camera position={cameraPosition} target={cameraTarget} floorNumber={microRoute && microRoute.length > 0 && microRoute[step] ? microRoute[step].floor : floorNumber}/>
-          <Plane args={[1000, 1000]} position={[0, -10, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <Camera
+          position={cameraPosition}
+          target={cameraTarget}
+          floorNumber={
+            microRoute && microRoute.length > 0 && microRoute[step]
+              ? microRoute[step].floor
+              : floorNumber
+          }
+        />
+        <Plane
+          args={[1000, 1000]}
+          position={[0, -10, 0]}
+          rotation={[-Math.PI / 2, 0, 0]}
+        >
           <meshStandardMaterial map={travaTexture} />
         </Plane>
       </Canvas>

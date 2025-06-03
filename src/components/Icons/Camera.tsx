@@ -6,7 +6,7 @@ import * as THREE from "three";
 import { useRouteStore } from "../store/store";
 import { getFloorDefaultPosition } from "../FloorMap/FloorMap";
 
-const SMOOTHNESS = 0.10;
+const SMOOTHNESS = 0.1;
 const RETURN_DELAY = 4500;
 const TRANSITION_TIME = 1500;
 
@@ -24,12 +24,12 @@ export const Camera = ({
   const [userControlling, setUserControlling] = useState(false);
   const lastInteraction = useRef(Date.now());
   const animationRef = useRef<number>(undefined);
-  const {setCurrentFloor, currentFloor} = useRouteStore()
+  const { setCurrentFloor, currentFloor } = useRouteStore();
 
   // Используем рефы вместо стейта для текущих целей
   const targetPosRef = useRef(new THREE.Vector3(...position));
   const targetLookAtRef = useRef(new THREE.Vector3(...target));
-  const targetFloor = useRef(floorNumber)
+  const targetFloor = useRef(floorNumber);
 
   // Инициализация
   useEffect(() => {
@@ -52,27 +52,26 @@ export const Camera = ({
         setTimeout(checkAutoReturn, RETURN_DELAY);
       };
 
-      controls.addEventListener('start', onStart);
-      controls.addEventListener('end', onEnd);
+      controls.addEventListener("start", onStart);
+      controls.addEventListener("end", onEnd);
 
       return () => {
-        controls.removeEventListener('start', onStart);
-        controls.removeEventListener('end', onEnd);
+        controls.removeEventListener("start", onStart);
+        controls.removeEventListener("end", onEnd);
         cancelAnimation();
       };
     }
   }, []);
 
   useEffect(() => {
-    const currentPosition = getFloorDefaultPosition(currentFloor)
-    const currentTarget = [currentPosition[0], 0, currentPosition[2]]
-    console.log(currentPosition, currentTarget)
+    const currentPosition = getFloorDefaultPosition(currentFloor);
+    const currentTarget = [currentPosition[0], 0, currentPosition[2]];
     startAnimation(
       new THREE.Vector3(...currentPosition),
       new THREE.Vector3(...currentTarget)
-    )
+    );
     lastInteraction.current = Date.now();
-  }, [currentFloor])
+  }, [currentFloor]);
 
   const checkAutoReturn = () => {
     if (Date.now() - lastInteraction.current >= RETURN_DELAY) {
@@ -83,9 +82,8 @@ export const Camera = ({
         new THREE.Vector3(...targetPosRef.current),
         new THREE.Vector3(...targetLookAtRef.current)
       );
-      console.log(targetFloor.current)
-      const newFloor = targetFloor.current
-      setCurrentFloor(newFloor)
+      const newFloor = targetFloor.current;
+      setCurrentFloor(newFloor);
     }
   };
 
@@ -93,14 +91,14 @@ export const Camera = ({
   useEffect(() => {
     targetPosRef.current.set(...position);
     targetLookAtRef.current.set(...target);
-    targetFloor.current = floorNumber
-    
+    targetFloor.current = floorNumber;
+
     if (!userControlling) {
       startAnimation(
         new THREE.Vector3(...position),
         new THREE.Vector3(...target)
       );
-      setCurrentFloor(targetFloor.current)
+      setCurrentFloor(targetFloor.current);
     }
   }, [position, target]);
 
@@ -111,12 +109,17 @@ export const Camera = ({
     }
   };
 
-  const startAnimation = (targetPos: THREE.Vector3, targetLookAt: THREE.Vector3) => {
+  const startAnimation = (
+    targetPos: THREE.Vector3,
+    targetLookAt: THREE.Vector3
+  ) => {
     cancelAnimation();
 
     const startPos = new THREE.Vector3().copy(camera.position);
-    const startTarget = new THREE.Vector3().copy(controlsRef.current?.target || targetLookAt);
-    
+    const startTarget = new THREE.Vector3().copy(
+      controlsRef.current?.target || targetLookAt
+    );
+
     let startTime: number | null = null;
 
     const animate = (currentTime: number) => {
@@ -125,11 +128,15 @@ export const Camera = ({
       const progress = Math.min(elapsed / TRANSITION_TIME, 1);
 
       const easedProgress = easeInOutCubic(progress);
-      
+
       camera.position.lerpVectors(startPos, targetPos, easedProgress);
-      
+
       if (controlsRef.current) {
-        controlsRef.current.target.lerpVectors(startTarget, targetLookAt, easedProgress);
+        controlsRef.current.target.lerpVectors(
+          startTarget,
+          targetLookAt,
+          easedProgress
+        );
         controlsRef.current.update();
       }
 
