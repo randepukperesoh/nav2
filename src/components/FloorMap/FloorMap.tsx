@@ -1,4 +1,4 @@
-import { Canvas, useLoader, useThree } from "@react-three/fiber";
+import { Canvas, useLoader } from "@react-three/fiber";
 import { useFloorLoader } from "../../hooks/useFloorLoader";
 import { FloorManipulator } from "../FloorManipulator/FloorManipulator";
 import { Room, type IDot } from "../Room/Room";
@@ -47,7 +47,6 @@ const FloorMap = () => {
     handleChangeFloor,
     selectedFloor,
     isLoading,
-    progress,
   } = useFloorLoader();
 
   const { startId, endId } = useRouteStore();
@@ -128,7 +127,7 @@ const FloorMap = () => {
         
         {isLoading ? (
           <Html center>
-            <div className="loading-indicator">{`Загрузка моделей ${progress}%`}</div>
+            <span className="loader"></span>
           </Html>
         ) : (
           <>
