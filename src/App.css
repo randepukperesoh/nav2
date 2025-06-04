@@ -201,6 +201,7 @@
   color: #80889d;
   transition: all 0.3s ease;
   cursor: pointer;
+  align-items: center;
 }
 
 .room_btn:hover {

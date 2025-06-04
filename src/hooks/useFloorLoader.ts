@@ -16,6 +16,7 @@ const MOCK_PATHS = [
 
 export const useFloorLoader = () => {
   const { setCurrentFloor, currentFloor } = useRouteStore();
+  
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [modelFloors, setModelFloors] = useState<any>([]);

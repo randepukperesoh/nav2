@@ -1,6 +1,5 @@
 import type { Position } from "./types";
 
-// utils.ts
 export function calculateDistance(point1: Position, point2: Position): number {
     return Math.sqrt(
         Math.pow(point1[0] - point2[0], 2) +
@@ -13,4 +12,7 @@ export function positionToString(position: Position): string {
     return position.join(',');
 }
 
-
+export const loadJson = async <T,>(path: string): Promise<T> => {
+  const response = await fetch(`/${path}.json`);
+  return await response.json();
+};

@@ -1,22 +1,22 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { visualizer } from "rollup-plugin-visualizer";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   plugins: [
     react(),
     visualizer({
-      filename: "stats.html",
+      filename: 'stats.html',
       open: true,
-    }),
+    })
   ],
   build: {
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ["react", "react-dom"],
-          three: ["three"],
-          reactReconciler: ["react-reconciler"],
+          vendor: ['react', 'react-dom'],
+          three: ['three'],
+          reactReconciler: ['react-reconciler'],
         },
       },
     },

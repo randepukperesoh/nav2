@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { Graph } from "../graph";
 import { calculateDistance, positionToString } from "../helper";
-import namedPoints from "../assets/names.json";
-import segments from "../assets/routes.json";
 import type { Position } from "../types";
 import { useRouteStore } from "../components/store/store";
+import { useGetPoints } from "./useGetPoints";
+import { useGetRoutes } from "./useGetRoutes";
 
 interface ICloses {
   vertex: string;
   distance: number;
 }
+
 
 export const useShortestPath = (
   startName: string | null,
@@ -19,6 +20,14 @@ export const useShortestPath = (
   const [error, setError] = useState<string | null>(null);
 
   const { setRoute } = useRouteStore();
+
+  const { namedPoints, loadPoints } = useGetPoints();
+  const { routes: segments, loadRoutes } = useGetRoutes();
+
+  useEffect(() => {
+    loadRoutes()
+    loadPoints()
+  },[loadPoints, loadRoutes])
 
   useEffect(() => {
     try {
@@ -40,13 +49,13 @@ export const useShortestPath = (
       });
 
       // Добавляем вершины для именованных точек
-      namedPoints.names.flat().forEach((namedPoint) => {
+      namedPoints?.names.flat().forEach((namedPoint) => {
         const pointVertex = positionToString(namedPoint.position as Position);
         graph.addVertex(pointVertex);
       });
 
       // Соединяем именованные точки с ближайшими сегментами
-      namedPoints.names.flat().forEach((namedPoint) => {
+      namedPoints?.names.flat().forEach((namedPoint) => {
         const pointVertex = positionToString(namedPoint.position as Position);
         let closestSegment: ICloses = {} as ICloses;
         let minDistance = Infinity;
@@ -84,12 +93,12 @@ export const useShortestPath = (
         }
       });
 
-      const startVertex = namedPoints.names.flat().find(
-        (point) => point.name === startName
-      )?.position as Position;
-      const finishVertex = namedPoints.names.flat().find(
-        (point) => point.name === finishName
-      )?.position as Position;
+      const startVertex = namedPoints?.names
+        .flat()
+        .find((point) => point.name === startName)?.position as Position;
+      const finishVertex = namedPoints?.names
+        .flat()
+        .find((point) => point.name === finishName)?.position as Position;
 
       if (startVertex && finishVertex) {
         const startVertexStr = positionToString(startVertex);
@@ -103,13 +112,13 @@ export const useShortestPath = (
         setRoute(routes);
       } else {
         setError("Начальная или конечная точка не найдена.");
-        setRoute([])
+        setRoute([]);
       }
     } catch (err) {
-      setRoute([])
+      setRoute([]);
       setError("Произошла ошибка при вычислении кратчайшего пути: " + err);
     }
-  }, [startName, finishName, setRoute]);
+  }, [startName, finishName, setRoute, segments, namedPoints?.names]);
 
   return { shortestPath, error };
 };

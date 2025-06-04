@@ -1,4 +1,4 @@
-export const FloorManipulator = ({
+const FloorManipulator = ({
   arrFloors,
   handleChangeFloor,
   selectedFloor,
@@ -24,3 +24,5 @@ export const FloorManipulator = ({
     </div>
   );
 };
+
+export default FloorManipulator;

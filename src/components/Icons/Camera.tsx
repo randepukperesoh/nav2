@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { useRouteStore } from "../store/store";
-import { getFloorDefaultPosition } from "../FloorMap/FloorMap";
+import { getFloorDefaultPosition } from "../FloorMap/helper";
 
 const SMOOTHNESS = 0.1;
 const RETURN_DELAY = 4500;
@@ -20,6 +20,7 @@ export const Camera = ({
   floorNumber: number;
 }) => {
   const { camera } = useThree();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const controlsRef = useRef<any>(null);
   const [userControlling, setUserControlling] = useState(false);
   const lastInteraction = useRef(Date.now());
