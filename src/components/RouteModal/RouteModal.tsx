@@ -1,5 +1,4 @@
 import {
-  useEffect,
   useRef,
   useState,
   type FC,
@@ -44,8 +43,6 @@ export const RouteModal: FC<IRouteModal> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [startY, setStartY] = useState<number | null>(null);
-
-  const [focusFlag, setFocusFlag] = useState(0);
 
   const qrRef = useRef<SVGSVGElement>(null);
 
@@ -122,9 +119,7 @@ export const RouteModal: FC<IRouteModal> = ({
     }
   };
 
-  useEffect(() => {
-    inpRef.current?.focus();
-  }, [focusFlag]);
+  const handleFocus = () => inpRef.current?.focus();
 
   return (
     <div
@@ -141,11 +136,11 @@ export const RouteModal: FC<IRouteModal> = ({
           <div className="modalRoute">
             <div className="modalRoute_route">
               <div className="modalRoute_route_prefix">
-                <div>От: </div>
+                <div>Откуда: </div>
                 <div
                   onClick={() => {
                     setStartId(null);
-                    setFocusFlag((prev) => prev + 1);
+                    handleFocus();
                   }}
                   className="roomTag"
                 >
@@ -155,11 +150,11 @@ export const RouteModal: FC<IRouteModal> = ({
               <RouteIcon />
 
               <div className="modalRoute_route_prefix">
-                <div>До :</div>
+                <div>Куда: </div>
                 <div
                   onClick={() => {
                     setEndId(null);
-                    setFocusFlag((prev) => prev + 1);
+                    handleFocus();
                   }}
                   className="roomTag"
                 >
