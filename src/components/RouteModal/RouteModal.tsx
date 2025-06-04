@@ -64,37 +64,40 @@ const RouteModal: FC<IRouteModal> = ({
       {isOpen && (
         <div className="modal-content">
           <div className="modalRoute">
-            {microRoute?.length === 0 && (
-              <>
-                <div className="modalRoute_route">
-                  <div className="modalRoute_route_prefix">
-                    <div>Откуда: </div>
-                    <div
-                      onClick={() => {
-                        handleFocus();
-                        setStartId(null);
-                      }}
-                      className="roomTag"
-                    >
-                      {startId}
-                    </div>
-                  </div>
-                  <RouteIcon />
-
-                  <div className="modalRoute_route_prefix">
-                    <div>Куда: </div>
-                    <div
-                      onClick={() => {
-                        handleFocus();
-                        setEndId(null);
-                      }}
-                      className="roomTag"
-                    >
-                      {endId}
-                    </div>
+            <>
+              <div className="modalRoute_route">
+                <div className="modalRoute_route_prefix">
+                  <div>Откуда: </div>
+                  <div
+                    onClick={() => {
+                      handleFocus();
+                      setStartId(null);
+                    }}
+                    className="roomTag"
+                  >
+                    {startId}
                   </div>
                 </div>
+                <RouteIcon />
 
+                <div className="modalRoute_route_prefix">
+                  <div>Куда: </div>
+                  <div
+                    onClick={() => {
+                      handleFocus();
+                      setEndId(null);
+                    }}
+                    className="roomTag"
+                  >
+                    {endId}
+                  </div>
+                </div>
+              </div>
+
+              <ModalQrCode endId={endId} startId={startId} />
+            </>
+            {microRoute?.length === 0 && (
+              <>
                 <div className="modalRoute_flex">
                   <input
                     ref={inpRef}
@@ -103,9 +106,6 @@ const RouteModal: FC<IRouteModal> = ({
                     onChange={(e) => setSearchName(e.currentTarget.value)}
                   />
                 </div>
-
-                <ModalQrCode endId={endId} startId={startId} />
-
                 <div className="modalRoute_cards">
                   {dots.map((el, i) => (
                     <RoomTag

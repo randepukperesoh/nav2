@@ -29,24 +29,23 @@ const RouteDirection: FC<IRouteDirection> = ({
   step,
 }) => {
   return (
-    <>
-      <div>{MockDirection[microRoute?.[step]?.direction] || ""}</div>
+    <div className="flex">
+      <button className="romm_btn" onClick={handlePrevStep}>
+        Назад
+      </button>
+      <div>
+        <div>{MockDirection[microRoute?.[step]?.direction] || ""}</div>
 
-      <div className="distance">
-        {microRoute && microRoute[step] && microRoute[step].distance
-          ? microRoute?.[step]?.distance + " метров"
-          : ""}
+        <div className="distance">
+          {microRoute && microRoute[step] && microRoute[step].distance
+            ? microRoute?.[step]?.distance + " метров"
+            : ""}
+        </div>
       </div>
-
-      <div className="modal_room_btns">
-        <button className="romm_btn" onClick={handlePrevStep}>
-          Назад
-        </button>
-        <button className="romm_btn" onClick={handleNextStep}>
-          Вперед
-        </button>
-      </div>
-    </>
+      <button className="romm_btn" onClick={handleNextStep}>
+        Вперед
+      </button>
+    </div>
   );
 };
 

@@ -99,7 +99,9 @@ export const Camera = ({
         new THREE.Vector3(...position),
         new THREE.Vector3(...target)
       );
-      setCurrentFloor(targetFloor.current);
+      if (targetFloor.current !== currentFloor) {
+        setCurrentFloor(targetFloor.current);
+      }
     }
   }, [position, target]);
 
