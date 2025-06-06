@@ -3,7 +3,6 @@ import { Camera } from "../Icons/Camera";
 import { AnimatedLine } from "../AnimtedLine/AnimatedLine";
 import { Room, type IDot } from "../Room/Room";
 import { Canvas } from "@react-three/fiber";
-import useLoadTexture from "../../hooks/useLoadTexture";
 import { useEffect, useState, type FC } from "react";
 import type { Position } from "../../types";
 import type { DirectionStep } from "../../hooks/useMicroRoute";
@@ -13,6 +12,7 @@ interface ICustomCanvas {
   cameraPosition: Position;
   cameraTarget: Position;
   selectedFloor: any;
+  environment: any;
   floorNumber: number;
   isLoading: boolean;
   microRoute: DirectionStep[];
@@ -25,14 +25,13 @@ const CustomCanvas: FC<ICustomCanvas> = ({
   cameraTarget,
   isLoading,
   selectedFloor,
+  environment,
   floorNumber,
   microRoute,
   step,
   routes,
 }) => {
   const [openModalName, setOpenModalName] = useState<string | null>(null);
-
-  const { travaTexture } = useLoadTexture();
 
   const { namedPoints: dots, loadPoints } = useGetPoints();
 
@@ -41,10 +40,9 @@ const CustomCanvas: FC<ICustomCanvas> = ({
   }, [loadPoints]);
 
   return (
-    <Canvas style={{ background: "#edeef0" }} camera={{ fov: 90 }}>
+    <Canvas style={{ background: "#EAD27BFF" }} camera={{ fov: 90 }}>
       {isLoading ? (
         <Html center>
-          <span className="loader"></span>
         </Html>
       ) : (
         <>
@@ -58,6 +56,7 @@ const CustomCanvas: FC<ICustomCanvas> = ({
               <div>Ошибка загрузки модели этажа. Перезагрузите страницу</div>
             </Html>
           )}
+          {environment && floorNumber == 1 && <primitive object={environment.scene} position={[5, 3, 5]}/>}
           {dots?.names[floorNumber].map((el, i) => {
             return (
               <Room
@@ -87,8 +86,9 @@ const CustomCanvas: FC<ICustomCanvas> = ({
         args={[1000, 1000]}
         position={[0, -10, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
+        
       >
-        <meshStandardMaterial map={travaTexture} />
+        <meshStandardMaterial color={"#EAD27B"} />
       </Plane>
     </Canvas>
   );

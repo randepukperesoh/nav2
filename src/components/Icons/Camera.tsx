@@ -157,7 +157,7 @@ export const Camera = ({
 
   return (
     <>
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={1.2} />
       <directionalLight position={[10, 40, 10]} intensity={1} />
       <PerspectiveCamera near={0.1} far={1000} />
       <OrbitControls

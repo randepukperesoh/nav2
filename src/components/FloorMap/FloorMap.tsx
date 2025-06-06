@@ -7,6 +7,7 @@ import { lazy, useEffect, useState } from "react";
 import type { Position } from "../../types";
 import { getFloorDefaultPosition } from "./helper";
 import CustomCanvas from "./Canvas";
+import { useEnvitonmentLoader } from "../../hooks/useEnvironmentLoader";
 
 const RouteModal = lazy(() => import("../RouteModal/RouteModal"));
 const FloorManipulator = lazy(
@@ -21,6 +22,10 @@ const FloorMap = () => {
     selectedFloor,
     isLoading,
   } = useFloorLoader();
+
+  const {
+    model: environment
+  } = useEnvitonmentLoader()
 
   const { startId, endId } = useRouteStore();
 
@@ -87,6 +92,7 @@ const FloorMap = () => {
         cameraTarget={cameraTarget}
         isLoading={isLoading}
         selectedFloor={selectedFloor}
+        environment={environment}
         floorNumber={floorNumber}
         microRoute={microRoute}
         step={step}
